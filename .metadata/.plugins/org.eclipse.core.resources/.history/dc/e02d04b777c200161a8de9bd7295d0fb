@@ -1,0 +1,6 @@
+package CourseWork2;
+
+public class MyMouseListener implements MouseListener{
+	
+
+}

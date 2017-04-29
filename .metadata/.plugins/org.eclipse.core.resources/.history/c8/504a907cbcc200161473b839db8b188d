@@ -1,0 +1,78 @@
+package CourseWork2;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Random;
+
+public class Reel extends Thread {
+
+	// instantiating 6 Symbol objects, representing 6 symbols
+	Symbol seven = new Symbol("images/redseven.png", 7);
+	Symbol bell = new Symbol("images/bell.png", 6);
+	Symbol watermelon = new Symbol("images/watermelon.png", 5);
+	Symbol plum = new Symbol("images/plum.png", 4);
+	Symbol lemon = new Symbol("images/lemon.png", 3);
+	Symbol cherry = new Symbol("images/cherry.png", 2);
+
+	// an array representing a reel, containing all the symbols
+	Symbol[] reel = { seven, bell, watermelon, plum, lemon, cherry };
+
+	// this Symbol object will be set after spinning
+	public Symbol returnSymbol = null;
+
+	/**
+	 * returns the symbol, which is set after spinning
+	 * 
+	 * @return : returnSymbol
+	 */
+	public Symbol getReturnSymbol() {
+		return this.returnSymbol;
+	}
+
+	/**
+	 * returns random array
+	 */
+	public Symbol[] spin() {
+		//Symbol arr[] = { seven, bell, watermelon, plum, lemon, cherry };
+		//return arr;
+		
+		Random rgen = new Random();  // Random number generator			
+		 
+		for (int i=0; i<reel.length; i++) {
+		    int randomPosition = rgen.nextInt(reel.length);
+		    Symbol temp = reel[i];
+		    reel[i] = reel[randomPosition];
+		    reel[randomPosition] = temp;
+		}
+ 
+		return reel;
+		
+		
+		
+	}
+	
+	/**
+	 * spins single reel OLD
+	 */
+	public void spinOld() {
+		returnSymbol = reel[(int) (Math.random() * (reel.length))];
+		// for(Symbol s : reel){
+		// returnSymbol = s;
+		// }
+	}
+
+	/**
+	 * running the thread
+	 */
+	public void run() {
+		spin();
+		// System.out.println("a");
+
+	}
+
+	public void shuffle() {
+		Collections.shuffle(Arrays.asList(reel));
+	}
+
+}

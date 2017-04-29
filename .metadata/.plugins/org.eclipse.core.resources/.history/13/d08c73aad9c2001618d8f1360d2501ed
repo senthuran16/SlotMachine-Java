@@ -1,0 +1,1188 @@
+/**
+ *
+ * @author 2014016
+ */
+package CourseWork2;
+
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
+import java.beans.PropertyChangeEvent;
+import java.beans.beancontext.BeanContext;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Date;
+import java.util.Scanner;
+
+import javax.imageio.ImageIO;
+import javax.swing.*;
+
+public class MyGUI extends JFrame {
+
+	SlotMachineController machine = new SlotMachineController();
+
+	// status of all the reels spinning
+	boolean isSpinning = false;
+
+	public MyGUI(String title) {
+		// Title of the window
+		super(title);
+
+	}
+
+	public static void main(String[] args) {
+		// creating the main GUI
+		MyGUI my = new MyGUI("Slot Machine");
+		my.createSlotMachineGUI();
+
+	}
+
+	/**
+	 * creates the main GUI of the Slot Machine
+	 */
+	public void createSlotMachineGUI() {
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setSize(900, 600);
+
+		// create panel
+		// outer containing panel
+		JPanel panel = new JPanel();
+		panel.setLayout(new GridLayout(4, 1, 50, 50));
+		panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+		add(panel);
+
+		// panel 1
+		JPanel panel1 = new JPanel();
+		panel1.setLayout(new GridLayout(1, 4));
+
+		JLabel lblNone1 = new JLabel("");
+		panel1.add(lblNone1);
+
+		JPanel panel1_2 = new JPanel();
+		panel1_2.setLayout(new GridLayout(2, 1));
+		JLabel lblBetAreaText = new JLabel("BETTING");
+		lblBetAreaText.setHorizontalAlignment(SwingConstants.CENTER);
+		panel1_2.add(lblBetAreaText);
+		JLabel lblBetArea = new JLabel("BET AREA");
+		lblBetArea.setFont(new Font("Arial", Font.PLAIN, 50));
+		lblBetArea.setHorizontalAlignment(SwingConstants.CENTER);
+		lblBetArea.setBackground(Color.DARK_GRAY);
+		lblBetArea.setForeground(Color.white);
+		lblBetArea.setOpaque(true);
+
+		panel1_2.add(lblBetArea);
+		panel1.add(panel1_2);
+
+		JPanel panel1_3 = new JPanel();
+		panel1_3.setLayout(new GridLayout(2, 1));
+		JLabel lblCreditAreaText = new JLabel("CREDITS");
+		lblCreditAreaText.setHorizontalAlignment(SwingConstants.CENTER);
+		panel1_3.add(lblCreditAreaText);
+		JLabel lblCreditArea = new JLabel("CREDIT AREA");
+		lblCreditArea.setFont(new Font("Arial", Font.PLAIN, 50));
+		lblCreditArea.setHorizontalAlignment(SwingConstants.CENTER);
+		lblCreditArea.setBackground(Color.BLACK);
+		lblCreditArea.setForeground(Color.orange);
+		lblCreditArea.setOpaque(true);
+		panel1_3.add(lblCreditArea);
+		panel1.add(panel1_3);
+
+		JLabel lblNone2 = new JLabel("");
+		panel1.add(lblNone2);
+		panel.add(panel1);
+
+		// panel 2
+		JPanel panel2 = new JPanel();
+		panel2.setLayout(new GridLayout(1, 5, 20, 20));
+
+		JLabel lblNone3 = new JLabel("");
+		panel2.add(lblNone3);
+
+		// set initial images for reels ////////////////////////////////////
+
+		// REEL 1
+		// ---------------------------------------------------------------
+		JLabel lblReel1 = new JLabel();
+		lblReel1.setHorizontalAlignment(SwingConstants.CENTER);
+		lblReel1.setBackground(Color.WHITE);
+		lblReel1.setOpaque(true);
+
+		// getting a random image
+		machine.reel1.spinOld();
+		String reel1Image = machine.reel1.returnSymbol.getImage();
+
+		// read the picture as a BufferedImage
+		BufferedImage img1 = null;
+		try {
+			img1 = ImageIO.read(new File(reel1Image));
+		} catch (IOException e) {
+			// error message
+			JOptionPane.showMessageDialog(new JFrame(), "Loading image for Reel 1 failed", "Error",
+					JOptionPane.ERROR_MESSAGE);
+		}
+
+		// resize the BufferedImage
+		Image dimg1 = img1.getScaledInstance(100, 100, BufferedImage.SCALE_SMOOTH);
+
+		// assign to reel label
+		ImageIcon imageIcon1 = new ImageIcon(dimg1);
+		lblReel1.setIcon(imageIcon1);
+		panel2.add(lblReel1);
+		// -----------------------------------------------------------------------
+
+		// REEL 2
+		// ---------------------------------------------------------------
+		JLabel lblReel2 = new JLabel();
+		lblReel2.setHorizontalAlignment(SwingConstants.CENTER);
+		lblReel2.setBackground(Color.WHITE);
+		lblReel2.setOpaque(true);
+
+		// getting a random image
+		machine.reel2.spinOld();
+		String reel2Image = machine.reel2.returnSymbol.getImage();
+
+		// read the picture as a BufferedImage
+		BufferedImage img2 = null;
+		try {
+			img2 = ImageIO.read(new File(reel2Image));
+		} catch (IOException e) {
+			// error message
+			JOptionPane.showMessageDialog(new JFrame(), "Loading image for Reel 2 failed", "Error",
+					JOptionPane.ERROR_MESSAGE);
+		}
+
+		// resize the BufferedImage
+		Image dimg2 = img2.getScaledInstance(100, 100, BufferedImage.SCALE_SMOOTH);
+
+		// assign to reel label
+		ImageIcon imageIcon2 = new ImageIcon(dimg2);
+		lblReel2.setIcon(imageIcon2);
+		panel2.add(lblReel2);
+		// -----------------------------------------------------------------------
+
+		// REEL 3
+		// ---------------------------------------------------------------
+		JLabel lblReel3 = new JLabel();
+		lblReel3.setHorizontalAlignment(SwingConstants.CENTER);
+		lblReel3.setBackground(Color.WHITE);
+		lblReel3.setOpaque(true);
+
+		// getting a random image
+		machine.reel3.spinOld();
+		String reel3Image = machine.reel3.returnSymbol.getImage();
+
+		// read the picture as a BufferedImage
+		BufferedImage img3 = null;
+		try {
+			img3 = ImageIO.read(new File(reel3Image));
+		} catch (IOException e) {
+			// error message
+			JOptionPane.showMessageDialog(new JFrame(), "Loading image for Reel 3 failed", "Error",
+					JOptionPane.ERROR_MESSAGE);
+		}
+
+		// resize the BufferedImage
+		Image dimg3 = img3.getScaledInstance(100, 100, BufferedImage.SCALE_SMOOTH);
+
+		// assign to reel label
+		ImageIcon imageIcon3 = new ImageIcon(dimg3);
+		lblReel3.setIcon(imageIcon3);
+		panel2.add(lblReel3);
+		// -----------------------------------------------------------------------
+
+		JLabel lblNone4 = new JLabel("");
+		panel2.add(lblNone4);
+		panel.add(panel2);
+
+		// panel 3
+		JPanel panel3 = new JPanel();
+		panel3.setLayout(new GridLayout(1, 3, 10, 10));
+
+		JPanel panel3_1 = new JPanel();
+		panel3_1.setLayout(new GridLayout(1, 2, 10, 10));
+		JButton btnBetOne = new JButton("BET ONE");
+		panel3_1.add(btnBetOne);
+		JButton btnBetMax = new JButton("BET MAX");
+		panel3_1.add(btnBetMax);
+		panel3.add(panel3_1);
+
+		JPanel panel3_2 = new JPanel();
+		panel3_2.setLayout(new GridLayout(1, 1, 10, 10));
+		JButton btnSpin = new JButton("SPIN");
+		panel3_2.add(btnSpin);
+		panel3.add(panel3_2);
+
+		JPanel panel3_3 = new JPanel();
+		panel3_3.setLayout(new GridLayout(1, 2, 10, 10));
+		JButton btnAddCoin = new JButton("ADD COIN");
+		panel3_3.add(btnAddCoin);
+		JButton btnReset = new JButton("RESET");
+		panel3_3.add(btnReset);
+		panel3.add(panel3_3);
+
+		panel.add(panel3);
+
+		// panel 4
+		JPanel panel4 = new JPanel();
+		panel4.setLayout(new GridLayout(1, 3));
+
+		JPanel panel4_1 = new JPanel();
+		panel4_1.setLayout(new GridLayout(2, 1));
+		panel4.add(panel4_1);
+
+		// JLabel lblNone5 = new JLabel("");
+		// panel4_1.add(lblNone5);
+		JLabel lblUsername = new JLabel("USER");
+		panel4_1.add(lblUsername);
+
+		JPanel panel4_1_2 = new JPanel();
+		panel4_1_2.setLayout(new GridLayout(1, 2, 10, 10));
+		panel4_1.add(panel4_1_2);
+
+		JButton btnAdminPanel = new JButton("Admin Panel");
+		panel4_1_2.add(btnAdminPanel);
+
+		JButton btnStats = new JButton("Statistics");
+		panel4_1_2.add(btnStats);
+		// panel4.add(panel4_1_2);
+		panel.add(panel4);
+
+		panel4.add(panel4_1);
+
+		JPanel panel4_2 = new JPanel();
+		panel4_2.setLayout(new GridLayout(1, 1));
+		JLabel lblStatus = new JLabel("Welcome to Slot Machine!");
+		lblStatus.setHorizontalAlignment(SwingConstants.CENTER);
+		panel4_2.add(lblStatus);
+		panel4.add(panel4_2);
+
+		JPanel panel4_3 = new JPanel();
+		panel4_3.setLayout(new GridLayout(3, 1));
+		JLabel lblNone6 = new JLabel("");
+		panel4_3.add(lblNone6);
+
+		// assigning initial values
+		// initial loaded credits
+		lblCreditArea.setText(machine.getCredits() + "");
+		// initially zero
+		lblBetArea.setText(0 + "");
+
+		// label actions --------------------------------------
+		/*
+		 * clicking one of the reels will stop spinning of all the reels
+		 */
+
+		// reel 1
+		lblReel1.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+
+				if (machine.isSpinning) {
+					// reels are currently spinning
+
+					// stop reels
+					machine.isSpinning = false;
+
+					// another game is played
+					machine.noOfGames++;
+
+					// calculate credit awarding
+					machine.calculate();
+
+					// update labels
+					lblBetArea.setText(machine.getBettingCredits() + "");
+					lblCreditArea.setText(machine.getCredits() + "");
+					lblStatus.setText(machine.status);
+
+				}
+
+			}
+
+		});
+
+		// reel 2
+		lblReel2.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+
+				if (machine.isSpinning) {
+					// reels are currently spinning
+
+					// stop reels
+					machine.isSpinning = false;
+
+					// another game is played
+					machine.noOfGames++;
+
+					// calculate credit awarding
+					machine.calculate();
+
+					// update labels
+					lblBetArea.setText(machine.getBettingCredits() + "");
+					lblCreditArea.setText(machine.getCredits() + "");
+					lblStatus.setText(machine.status);
+
+				}
+			}
+
+		});
+
+		// reel 3
+		lblReel3.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+
+				if (machine.isSpinning) {
+					// reels are currently spinning
+
+					// stop reels
+					machine.isSpinning = false;
+
+					// another game is played
+					machine.noOfGames++;
+
+					// calculate credit awarding
+					machine.calculate();
+
+					// update labels
+					lblBetArea.setText(machine.getBettingCredits() + "");
+					lblCreditArea.setText(machine.getCredits() + "");
+					lblStatus.setText(machine.status);
+
+				}
+			}
+
+		});
+
+		// button actions --------------------------------------
+
+		// spin
+		btnSpin.addActionListener(new ActionListener() {
+			// overriding the actionPerformed method
+			public void actionPerformed(ActionEvent e) {
+
+				// swapping spinning status
+				// isSpinning = !isSpinning;
+
+				if (!machine.isSpinning) {
+					// reels are not spinning
+					// spinning is allowed
+
+					machine.isAdditionalChance = false;
+
+					if (machine.getBettingCredits() != 0) {
+						// at least one credit is bet. Spinning is allowed
+
+						// start spinning
+						machine.isSpinning = true;
+
+						// one more game is played HERE IS THE ERROR
+						// //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+						// machine.noOfGames++;
+
+						if (machine.isSpinning) {
+							// spin all the reels until a reel is clicked
+
+							// REEL 1
+							// -------------------------------------------------
+
+							Reel reel1 = new Reel() {
+								// overriding reel 1's run method
+								public void run() {
+
+									// returns a random array
+									// spin();
+
+									// storing the returned random array
+									Symbol[] reelArray = spin();
+
+									// while (machine.isSpinning) {
+									// traverse through array
+
+									// spin reel 1
+									// isReel1Stopped = false;
+
+									for (int i = 0; i < reelArray.length; i++) {
+
+										if (machine.isSpinning) {
+
+											final int count = i;
+
+											SwingUtilities.invokeLater(new Runnable() {
+												public void run() {
+
+													// spinOld();
+
+													// read the picture as a
+													// BufferedImage
+													BufferedImage imgReel1 = null;
+													try {
+
+														// assign symbol for
+														// calculation
+														machine.reel1Symbol = reelArray[count];
+
+														imgReel1 = ImageIO
+																.read(new File(machine.reel1Symbol.getImage()));
+
+														// resize the
+														// BufferedImage
+														Image scaledImgReel1 = imgReel1.getScaledInstance(100, 100,
+																BufferedImage.SCALE_SMOOTH);
+
+														// assign to reel label
+														ImageIcon imageIconReel1 = new ImageIcon(scaledImgReel1);
+														lblReel1.setIcon(imageIconReel1);
+
+													} catch (IOException e) {
+														// error message
+														JOptionPane.showMessageDialog(new JFrame(),
+																"Loading image for Reel 3 failed", "Error",
+																JOptionPane.ERROR_MESSAGE);
+													}
+
+													/*
+													 * // resize the
+													 * BufferedImage Image
+													 * scaledImgReel1 =
+													 * imgReel1.
+													 * getScaledInstance(100,
+													 * 100, BufferedImage.
+													 * SCALE_SMOOTH);
+													 * 
+													 * // assign to reel label
+													 * ImageIcon imageIconReel1
+													 * = new
+													 * ImageIcon(scaledImgReel1)
+													 * ; lblReel1.setIcon(
+													 * imageIconReel1);
+													 */
+
+												}
+											});
+
+											try {
+												Thread.sleep(1000);
+											} catch (InterruptedException e) {
+
+											}
+										}
+
+										SwingUtilities.invokeLater(new Runnable() {
+											public void run() {
+												System.err.print(machine.reel1Symbol.getValue());
+											}
+										});
+
+										if (i == reelArray.length - 1) {
+											i = -1;
+										}
+									}
+
+								}
+							};
+
+							// ------------------------------------------------------
+
+							// REEL 2
+							// -------------------------------------------------
+
+							Reel reel2 = new Reel() {
+								// overriding reel 1's run method
+								public void run() {
+
+									// returns a random array
+									// spin();
+
+									// storing the returned random array
+									Symbol[] reelArray = spin();
+
+									while (machine.isSpinning) {
+										// while (machine.isSpinning) {
+										// traverse through array
+										for (int i = 0; i < reelArray.length; i++) {
+
+											final int count = i;
+
+											SwingUtilities.invokeLater(new Runnable() {
+												public void run() {
+
+													// spinOld();
+
+													// read the picture as a
+													// BufferedImage
+													BufferedImage imgReel2 = null;
+													try {
+														// assign symbol for
+														// calculation
+														machine.reel2Symbol = reelArray[count];
+
+														imgReel2 = ImageIO
+																.read(new File(machine.reel2Symbol.getImage()));
+
+														// resize the
+														// BufferedImage
+														Image scaledImgReel2 = imgReel2.getScaledInstance(100, 100,
+																BufferedImage.SCALE_SMOOTH);
+
+														// assign to reel label
+														ImageIcon imageIconReel2 = new ImageIcon(scaledImgReel2);
+														lblReel2.setIcon(imageIconReel2);
+
+													} catch (IOException e) {
+														// error message
+														JOptionPane.showMessageDialog(new JFrame(),
+																"Loading image for Reel 3 failed", "Error",
+																JOptionPane.ERROR_MESSAGE);
+													}
+
+													/*
+													 * // resize the
+													 * BufferedImage Image
+													 * scaledImgReel2 =
+													 * imgReel2.
+													 * getScaledInstance(100,
+													 * 100, BufferedImage.
+													 * SCALE_SMOOTH);
+													 * 
+													 * // assign to reel label
+													 * ImageIcon imageIconReel2
+													 * = new
+													 * ImageIcon(scaledImgReel2)
+													 * ; lblReel2.setIcon(
+													 * imageIconReel2);
+													 */
+												}
+											});
+
+											try {
+												Thread.sleep(1000);
+											} catch (InterruptedException e) {
+
+											}
+
+										}
+
+										SwingUtilities.invokeLater(new Runnable() {
+											public void run() {
+
+
+											}
+										});
+									}
+
+								}
+							};
+
+							// ------------------------------------------------------
+
+							// REEL 3
+							// -------------------------------------------------
+
+							Reel reel3 = new Reel() {
+								// overriding reel 1's run method
+								public void run() {
+
+									// returns a random array
+									// spin();
+
+									// storing the returned random array
+									Symbol[] reelArray = spin();
+
+									while (machine.isSpinning) {
+										// while (machine.isSpinning) {
+										// traverse through array
+										for (int i = 0; i < reelArray.length; i++) {
+
+											final int count = i;
+
+											SwingUtilities.invokeLater(new Runnable() {
+												public void run() {
+
+													// spinOld();
+
+													// read the picture as a
+													// BufferedImage
+													BufferedImage imgReel3 = null;
+													try {
+														// assign symbol for
+														// calculation
+														machine.reel3Symbol = reelArray[count];
+
+														imgReel3 = ImageIO
+																.read(new File(machine.reel3Symbol.getImage()));
+
+														// resize the
+														// BufferedImage
+														Image scaledImgReel3 = imgReel3.getScaledInstance(100, 100,
+																BufferedImage.SCALE_SMOOTH);
+
+														// assign to reel label
+														ImageIcon imageIconReel3 = new ImageIcon(scaledImgReel3);
+														lblReel3.setIcon(imageIconReel3);
+
+													} catch (IOException e) {
+														// error message
+														JOptionPane.showMessageDialog(new JFrame(),
+																"Loading image for Reel 3 failed", "Error",
+																JOptionPane.ERROR_MESSAGE);
+													}
+
+												}
+											});
+
+											try {
+												Thread.sleep(1000);
+											} catch (InterruptedException e) {
+
+											}
+										}
+
+										SwingUtilities.invokeLater(new Runnable() {
+											public void run() {
+
+												
+											}
+
+										});
+									}
+
+								}
+							};
+
+							// ------------------------------------------------------
+
+							reel1.start();
+							reel2.start();
+							reel3.start();
+						}
+
+						// spinning over
+						// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+						// if (!isSpinning) {
+						// spinning has stopped
+						/*
+						 * // calculate credit awarding machine.calculate();
+						 * 
+						 * // update labels
+						 * lblBetArea.setText(machine.getBettingCredits() + "");
+						 * lblCreditArea.setText(machine.getCredits() + "");
+						 * lblStatus.setText(machine.status);
+						 */
+						// }
+
+					} else {
+						// no credit is on bet. Spinning not allowed
+						machine.status = "You have no credits on bet. Please bet and spin";
+						lblStatus.setText(machine.status);
+					}
+
+				} else {
+					// reels are already spinning
+					// spinning is not allowed
+
+				}
+
+			}
+		});
+
+		// bet one button
+		btnBetOne.addActionListener(new ActionListener() {
+			// overriding the actionPerformed method
+			public void actionPerformed(ActionEvent e) {
+				if (machine.isAdditionalChance) {
+					// on an additional attempt
+					JOptionPane.showMessageDialog(new JFrame(), "You are having an additional chance!", "Error",
+							JOptionPane.ERROR_MESSAGE);
+				} else {
+					machine.betOne();
+					lblBetArea.setText(machine.getBettingCredits() + "");
+					lblCreditArea.setText(machine.getCredits() + "");
+				}
+			}
+		});
+
+		// bet max button
+		btnBetMax.addActionListener(new ActionListener() {
+			// overriding the actionPerformed method
+			public void actionPerformed(ActionEvent e) {
+				if (machine.isAdditionalChance) {
+					// on an additional attempt
+					JOptionPane.showMessageDialog(new JFrame(), "You are having an additional chance!", "Error",
+							JOptionPane.ERROR_MESSAGE);
+				} else {
+					machine.betMax();
+					lblBetArea.setText(machine.getBettingCredits() + "");
+					lblCreditArea.setText(machine.getCredits() + "");
+				}
+
+			}
+
+		});
+
+		// add coin button
+		btnAddCoin.addActionListener(new ActionListener() {
+			// overriding the actionPerformed method
+			public void actionPerformed(ActionEvent e) {
+				if (machine.isAdditionalChance) {
+					// on an additional attempt
+					JOptionPane.showMessageDialog(new JFrame(), "You are having an additional chance!", "Error",
+							JOptionPane.ERROR_MESSAGE);
+				} else {
+					machine.addCoin();
+					lblCreditArea.setText(machine.getCredits() + "");
+				}
+			}
+		});
+
+		// reset button
+		btnReset.addActionListener(new ActionListener() {
+			// overriding the actionPerformed method
+			public void actionPerformed(ActionEvent e) {
+				if (machine.isAdditionalChance) {
+					// on an additional attempt
+					JOptionPane.showMessageDialog(new JFrame(), "You are having an additional chance!", "Error",
+							JOptionPane.ERROR_MESSAGE);
+				} else {
+					machine.reset();
+					lblBetArea.setText(machine.getBettingCredits() + "");
+					lblCreditArea.setText(machine.getCredits() + "");
+				}
+
+			}
+		});
+
+		// adminPanel button
+		btnAdminPanel.addActionListener(new ActionListener() {
+			// overriding the actionPerformed method
+			public void actionPerformed(ActionEvent e) {
+				try {
+					// creating a new AdminGUI object
+					MyGUI loginGUI = new MyGUI("Login");
+					loginGUI.createLoginGUI();
+				} catch (Exception nonSpecificException_login) {
+					JOptionPane.showMessageDialog(new JFrame(), "Invalid values / actions detected", "Error",
+							JOptionPane.ERROR_MESSAGE);
+				}
+			}
+		});
+
+		// statistics
+		btnStats.addActionListener(new ActionListener() {
+			// overriding the actionPerformed method
+			public void actionPerformed(ActionEvent e) {
+				try {
+					if (machine.noOfGames == 0) {
+						// no games are played
+						// statistics not available
+						JOptionPane.showMessageDialog(new JFrame(),
+								"Statistics not available. You haven't played any game.", "Statistics Unavailable",
+								JOptionPane.INFORMATION_MESSAGE);
+					} else {
+						machine.netCreditsPerGame = (double) machine.netCredits / (double) machine.noOfGames;
+						MyGUI statisticsGUI = new MyGUI("Statistics");
+						statisticsGUI.createStatisticsGUI(600, 400, machine.noOfGames, machine.wins, machine.losses,
+								machine.netCreditsPerGame);
+
+						// createStatistics().setVisible(true);
+					}
+				} catch (Exception nonSpecificException_statistics) {
+					JOptionPane.showMessageDialog(new JFrame(), "Invalid values / actions detected", "Error",
+							JOptionPane.ERROR_MESSAGE);
+				}
+			}
+		});
+
+		setVisible(true);
+	}
+
+	public void createStatisticsGUI(int width, int height, int noOfGames, int wins, int losses,
+			double netCreditsPerGame) {
+
+		// Title of the window
+		// super("Statistics");
+		setDefaultCloseOperation(this.HIDE_ON_CLOSE);
+		setSize(width, height);
+
+		// local variables in order to make Save Status possible through method
+		int localNoOfGames = noOfGames;
+		int localWins = wins;
+		int localLosses = losses;
+		double localNetCreditsPerGame = netCreditsPerGame;
+
+		// main containing panel
+		JPanel panel = new JPanel();
+		panel.setLayout(new GridLayout(2, 1, 50, 50));
+		panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+		add(panel);
+
+		// panel1
+		JPanel panel1 = new JPanel();
+		panel1.setLayout(new GridLayout(4, 3));
+
+		panel1.add(new JLabel(""));
+
+		JLabel lblNetCreditsPerGameText = new JLabel("Net credits per game");
+		lblNetCreditsPerGameText.setHorizontalAlignment(SwingConstants.CENTER);
+		panel1.add(lblNetCreditsPerGameText);
+
+		panel1.add(new JLabel(""));
+		panel1.add(new JLabel(""));
+
+		JLabel lblNetCreditsPerGame = new JLabel(netCreditsPerGame + "");
+		lblNetCreditsPerGame.setHorizontalAlignment(SwingConstants.CENTER);
+		panel1.add(lblNetCreditsPerGame);
+
+		JButton btnSaveStatistics = new JButton("Save Statistics");
+		panel1.add(btnSaveStatistics);
+		// panel1.add(new JLabel(""));
+
+		JLabel lblWinsText = new JLabel("Wins");
+		lblWinsText.setHorizontalAlignment(SwingConstants.CENTER);
+		panel1.add(lblWinsText);
+
+		JLabel lblGamesText = new JLabel("Games");
+		lblGamesText.setHorizontalAlignment(SwingConstants.CENTER);
+		panel1.add(lblGamesText);
+
+		JLabel lblLossesText = new JLabel("Losses");
+		lblLossesText.setHorizontalAlignment(SwingConstants.CENTER);
+		panel1.add(lblLossesText);
+
+		JLabel lblWins = new JLabel(wins + "");
+		lblWins.setHorizontalAlignment(SwingConstants.CENTER);
+		panel1.add(lblWins);
+
+		JLabel lblGames = new JLabel(noOfGames + "");
+		lblGames.setHorizontalAlignment(SwingConstants.CENTER);
+		panel1.add(lblGames);
+
+		JLabel lblLosses = new JLabel(losses + "");
+		lblLosses.setHorizontalAlignment(SwingConstants.CENTER);
+		panel1.add(lblLosses);
+
+		panel.add(panel1);
+
+		// panel2
+		JPanel panel2 = new JPanel();
+		panel.add(panel2);
+
+		// button actions ------------------
+
+		// save statistics
+		btnSaveStatistics.addActionListener(new ActionListener() {
+			// overriding the actionPerformed method
+			public void actionPerformed(ActionEvent e) {
+				try {
+					saveStatistics(localNoOfGames, localWins, localLosses, localNetCreditsPerGame);
+				} catch (Exception nonSpecificException_saveStatistics) {
+					JOptionPane.showMessageDialog(new JFrame(), "Invalid values / actions detected", "Error",
+							JOptionPane.ERROR_MESSAGE);
+				}
+			}
+		});
+
+		setVisible(true);
+
+	}
+
+	/**
+	 * creates the Login GUI
+	 */
+	public void createLoginGUI() {
+		// Title of the window
+		// super("Login");
+		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+		setSize(500, 170);
+
+		// create panel
+		JPanel panel = new JPanel();
+		panel.setLayout(new GridLayout(3, 2, 10, 10));
+		panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+		// create components
+		JLabel lblUsername = new JLabel("Username");
+		JTextField txtUsername = new JTextField(10);
+		JLabel lblPassword = new JLabel("Password");
+		JPasswordField txtPassword = new JPasswordField(10);
+
+		// add components
+		add(panel);
+		panel.add(lblUsername);
+		panel.add(txtUsername);
+		panel.add(lblPassword);
+		panel.add(txtPassword);
+		panel.add(new JLabel(""));
+
+		// String userName = lblUsername.getText();
+		// String password = lblPassword.getText();
+		// action button
+		JButton btnLogin = new JButton("Login");
+		panel.add(btnLogin);
+
+		// login
+		btnLogin.addActionListener(new ActionListener() {
+			// overriding the actionPerformed method
+			public void actionPerformed(ActionEvent e) {
+				try {
+					String userName = "admin";
+					String password = "admin";
+					if (txtUsername.getText().equals(userName) && txtPassword.getText().equals(password)) {
+						// creating a new AdminGUI object
+						MyGUI adminGUI = new MyGUI("Admin Panel");
+						adminGUI.createAdminGUI();
+						setVisible(false);
+					} else {
+						// error message
+						JOptionPane.showMessageDialog(new JFrame(), "Invalid Username and/or Password",
+								"Access Denied!", JOptionPane.ERROR_MESSAGE);
+					}
+				} catch (Exception nonSpecificException_login) {
+					JOptionPane.showMessageDialog(new JFrame(), "Invalid values / actions detected", "Error",
+							JOptionPane.ERROR_MESSAGE);
+				}
+			}
+		});
+
+		setVisible(true);
+	}
+
+	/**
+	 * create the AdminGUI (Admin Panel)
+	 */
+	public void createAdminGUI() {
+		// super("Admin");
+		setDefaultCloseOperation(this.HIDE_ON_CLOSE);
+		setSize(500, 400);
+
+		// main containing panel
+		JPanel panel = new JPanel();
+		panel.setLayout(new GridLayout(8, 3, 10, 10));
+		panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+		add(panel);
+
+		panel.add(new JLabel(""));
+		panel.add(new JLabel(""));
+		panel.add(new JLabel(""));
+		panel.add(new JLabel(""));
+		JLabel lblInitialCreditsText = new JLabel("Initial Credits");
+		lblInitialCreditsText.setHorizontalAlignment(SwingConstants.CENTER);
+		panel.add(lblInitialCreditsText);
+
+		panel.add(new JLabel(""));
+		panel.add(new JLabel(""));
+
+		JTextField txtInitialCredits = new JTextField(SlotMachineController.initialCredits + "");
+		panel.add(txtInitialCredits);
+		panel.add(new JLabel(""));
+		panel.add(new JLabel(""));
+
+		JLabel lblMaximumBetCreditsText = new JLabel("Maximum Bet Credits");
+		lblMaximumBetCreditsText.setHorizontalAlignment(SwingConstants.CENTER);
+		panel.add(lblMaximumBetCreditsText);
+
+		panel.add(new JLabel(""));
+		panel.add(new JLabel(""));
+
+		JTextField txtMaxBetCredits = new JTextField(SlotMachineController.maxBetCredits + "");
+		panel.add(txtMaxBetCredits);
+		panel.add(new JLabel(""));
+		panel.add(new JLabel(""));
+		panel.add(new JLabel(""));
+		panel.add(new JLabel(""));
+		panel.add(new JLabel(""));
+
+		JButton btnUpdate = new JButton("UPDATE");
+		panel.add(btnUpdate);
+		panel.add(new JLabel(""));
+		panel.add(new JLabel(""));
+		panel.add(new JLabel(""));
+		panel.add(new JLabel(""));
+
+		// button actions ------------------
+
+		// update
+		btnUpdate.addActionListener(new ActionListener() {
+			// overriding the actionPerformed method
+			public void actionPerformed(ActionEvent e) {
+
+				try {
+					// validations for fields
+
+					// initial credits
+					if (Integer.parseInt(txtInitialCredits.getText()) <= 0) {
+						JOptionPane.showMessageDialog(new JFrame(), "Initial Credits should be more than 0", "Error",
+								JOptionPane.ERROR_MESSAGE);
+					} else if ((Integer.parseInt(txtMaxBetCredits.getText()) < 0) || (Integer
+							.parseInt(txtMaxBetCredits.getText()) > (Integer.parseInt(txtInitialCredits.getText())))) {
+						// max bet credits
+						JOptionPane.showMessageDialog(new JFrame(),
+								"Maximum Bet Credits should be more than 0 and Less than or equal to Initial Credits",
+								"Error", JOptionPane.ERROR_MESSAGE);
+					} else {
+						// static variables are overwritten
+						SlotMachineController.initialCredits = Integer.parseInt(txtInitialCredits.getText());
+						SlotMachineController.maxBetCredits = Integer.parseInt(txtMaxBetCredits.getText());
+
+						// storing file
+						updateDefaultValues();
+
+						// close
+						System.exit(0);
+
+					}
+				} catch (NumberFormatException numberFormatException) {
+					JOptionPane.showMessageDialog(new JFrame(), "Both the fields should be integers", "Error",
+							JOptionPane.ERROR_MESSAGE);
+				} catch (Exception nonSpecificException_Update) {
+					JOptionPane.showMessageDialog(new JFrame(), "Invalid values / actions detected", "Error",
+							JOptionPane.ERROR_MESSAGE);
+				}
+
+			}
+		});
+
+		setVisible(true);
+
+	}
+
+	// other methods
+
+	/**
+	 * stores statistics in a file
+	 */
+	public void saveStatistics(int noOfGames, int wins, int losses, double netCreditsPerGame) {
+		// getting current date
+		Date currentDate = new Date();
+
+		// declaring the file name as the current date
+		String fileName = currentDate.getDate() + "-" + (currentDate.getMonth() + 1) + "-"
+				+ (currentDate.getYear() + 1900) + "_" + currentDate.getHours() + "-" + currentDate.getMinutes() + "-"
+				+ currentDate.getSeconds();
+
+		// creating file object
+		File file = new File(fileName + ".txt");
+		PrintWriter pw = null;
+		FileWriter fw = null;
+
+		try {
+			fw = new FileWriter(file);
+			pw = new PrintWriter(fw, true);
+
+			// pw.println
+
+			// write statistics
+			// format : "noOfGames wins losses netCreditsPerGame"
+			pw.println(noOfGames + "\t" + wins + "\t" + losses + "\t" + netCreditsPerGame);
+
+			// success message
+			JOptionPane.showMessageDialog(new JFrame(), "File is successfully saved !", "Successful",
+					JOptionPane.INFORMATION_MESSAGE);
+		} catch (Exception e) {
+			// error message
+			JOptionPane.showMessageDialog(new JFrame(), "File saving failed", "Error", JOptionPane.ERROR_MESSAGE);
+
+		} finally {
+
+			pw.close();
+
+			try {
+				fw.close();
+			} catch (Exception e) {
+				// error message
+				JOptionPane.showMessageDialog(new JFrame(), "File saving failed", "Error", JOptionPane.ERROR_MESSAGE);
+			}
+		}
+
+	}
+
+	/**
+	 * updates admin modifyable to the file
+	 */
+	public void updateDefaultValues() {
+
+		// creating file object to overwrite the existing "admin.txt"
+		File file = new File("defaultValues.txt");
+		PrintWriter pw = null;
+		FileWriter fw = null;
+
+		try {
+			fw = new FileWriter(file);
+			pw = new PrintWriter(fw, true);
+
+			// pw.println
+
+			// write
+			pw.println(SlotMachineController.initialCredits);
+			pw.println(SlotMachineController.maxBetCredits);
+
+			// message box
+			JOptionPane.showMessageDialog(new JFrame(),
+					"Successfully updated ! Restart the program to run with changes", "Success",
+					JOptionPane.INFORMATION_MESSAGE);
+		} catch (Exception e) {
+			// error message
+			JOptionPane.showMessageDialog(new JFrame(), "Updating failed", "Error", JOptionPane.ERROR_MESSAGE);
+
+		} finally {
+
+			pw.close();
+
+			try {
+				fw.close();
+			} catch (Exception e) {
+				// error message
+				JOptionPane.showMessageDialog(new JFrame(), "Updating failed", "Error", JOptionPane.ERROR_MESSAGE);
+			}
+
+		}
+
+	}
+
+	/**
+	 * spin threads
+	 * 
+	 */
+	private void sfin() {
+		Reel reel1 = new Reel() {
+			public void run() {
+
+				// Simulate doing something useful.
+				for (int i = 0; i <= 10; i++) {
+
+					final int count = i;
+
+					SwingUtilities.invokeLater(new Runnable() {
+						public void run() {
+							// lblStatus.setText(Integer.toString(count));
+						}
+					});
+
+					try {
+						Thread.sleep(1000);
+					} catch (InterruptedException e) {
+
+					}
+				}
+
+				SwingUtilities.invokeLater(new Runnable() {
+					public void run() {
+						// lblStatus.setText("Completed.");
+					}
+				});
+
+			}
+		};
+
+		reel1.start();
+	}
+}
